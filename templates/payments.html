@@ -1,0 +1,109 @@
+
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2>Payment Management</h2>
+
+<h3>Create Payment</h3>
+
+<form action="/add_payment" method="POST">
+    <label>Payment Status:</label>
+
+    <select name="status_code" required>
+        {% for status in statuses %}
+        <option value="{{ status.status_code }}">
+            {{ status.status_code }} - {{ status.description }}
+        </option>
+        {% endfor %}
+    </select>
+
+    <br><br>
+
+    <label>Amount:</label>
+    <input
+        type="number"
+        name="amount"
+        min="0.01"
+        step="0.01"
+        required
+    >
+
+    <br><br>
+
+    <button type="submit">Create Payment</button>
+</form>
+
+<hr>
+
+<h3>Search and Filter Payments</h3>
+
+<form action="{{ url_for('payments') }}" method="GET">
+    <label>Search Payment ID:</label>
+
+    <input
+        type="text"
+        name="search"
+        placeholder="Enter payment ID"
+        value="{{ search }}"
+    >
+
+    <label>Payment Status:</label>
+
+    <select name="status">
+        <option value="">All Statuses</option>
+
+        {% for status in statuses %}
+        <option
+            value="{{ status.status_code }}"
+            {% if status_filter == status.status_code|string %}selected{% endif %}
+        >
+            {{ status.status_code }} - {{ status.description }}
+        </option>
+        {% endfor %}
+    </select>
+
+    <button type="submit">Search / Filter</button>
+    <a href="{{ url_for('payments') }}">Clear</a>
+</form>
+
+<hr>
+
+<h3>Payment List</h3>
+
+<table border="1" cellpadding="8">
+    <tr>
+        <th>Payment ID</th>
+        <th>Status Code</th>
+        <th>Status Description</th>
+        <th>Payment Date</th>
+        <th>Amount</th>
+        <th>Action</th>
+    </tr>
+
+    {% for payment in payments %}
+    <tr>
+        <td>{{ payment.payment_id }}</td>
+        <td>{{ payment.status_code }}</td>
+        <td>{{ payment.status_description }}</td>
+        <td>{{ payment.payment_date }}</td>
+        <td>{{ payment.amount }}</td>
+        <td>
+            <a href="{{ url_for('edit_payment', payment_id=payment.payment_id) }}">
+                Edit
+            </a>
+
+            <form
+                action="{{ url_for('delete_payment', payment_id=payment.payment_id) }}"
+                method="POST"
+                style="display:inline;"
+                onsubmit="return confirm('Delete this payment?');"
+            >
+                <button type="submit">Delete</button>
+            </form>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+
+{% endblock %}

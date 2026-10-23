@@ -1,0 +1,35 @@
+
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2>Edit Booking Agent</h2>
+
+<form
+    action="{{ url_for('edit_booking_agent', agent_id=agent.agent_id) }}"
+    method="POST"
+>
+    <label>Agent Name:</label>
+    <input
+        type="text"
+        name="agent_name"
+        maxlength="100"
+        value="{{ agent.agent_name }}"
+        required
+    >
+
+    <br><br>
+
+    <label>Details:</label>
+    <textarea name="details">{{ agent.details or "" }}</textarea>
+
+    <br><br>
+
+    <button type="submit">Save Changes</button>
+</form>
+
+<br>
+
+<a href="{{ url_for('booking_agents') }}">Back to Booking Agents</a>
+
+{% endblock %}

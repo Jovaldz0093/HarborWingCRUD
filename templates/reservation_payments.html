@@ -1,0 +1,80 @@
+
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2>Reservation-Payment Links</h2>
+
+<h3>Link a Payment to a Reservation</h3>
+
+<form method="POST" action="{{ url_for('reservation_payments') }}">
+    <label>Reservation:</label>
+    <select name="reservation_id" required>
+        {% for reservation in reservations %}
+        <option value="{{ reservation.reservation_id }}">
+            Reservation #{{ reservation.reservation_id }}
+        </option>
+        {% endfor %}
+    </select>
+
+    <br><br>
+
+    <label>Payment:</label>
+    <select name="payment_id" required>
+        {% for payment in payments %}
+        <option value="{{ payment.payment_id }}">
+            Payment #{{ payment.payment_id }}
+            - {{ payment.amount }}
+            ({{ payment.status_code }})
+        </option>
+        {% endfor %}
+    </select>
+
+    <br><br>
+
+    <button type="submit">Link Payment</button>
+</form>
+
+<hr>
+
+<h3>Existing Links</h3>
+
+<table border="1" cellpadding="8">
+    <tr>
+        <th>Reservation ID</th>
+        <th>Passenger</th>
+        <th>Payment ID</th>
+        <th>Status</th>
+        <th>Payment Date</th>
+        <th>Amount</th>
+        <th>Action</th>
+    </tr>
+
+    {% for link in links %}
+    <tr>
+        <td>{{ link.reservation_id }}</td>
+        <td>{{ link.first_name }} {{ link.last_name }}</td>
+        <td>{{ link.payment_id }}</td>
+        <td>{{ link.status_code }}</td>
+        <td>{{ link.payment_date }}</td>
+        <td>{{ link.amount }}</td>
+        <td>
+            <form
+                action="{{ url_for('unlink_payment',
+                    reservation_id=link.reservation_id,
+                    payment_id=link.payment_id) }}"
+                method="POST"
+                onsubmit="return confirm('Remove this link only? The payment will remain.');"
+            >
+                <button type="submit">Unlink</button>
+            </form>
+        </td>
+    </tr>
+    {% else %}
+    <tr>
+        <td colspan="7">No reservation-payment links found.</td>
+    </tr>
+    {% endfor %}
+</table>
+
+{% endblock %}

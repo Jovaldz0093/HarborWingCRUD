@@ -1,0 +1,79 @@
+
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2>Airport Management</h2>
+
+<h3>Add Airport</h3>
+
+<form action="/add_airport" method="POST">
+    <label>Airport Code:</label>
+    <input type="text" name="airport_code" maxlength="10" required>
+    <br><br>
+
+    <label>Airport Name:</label>
+    <input type="text" name="airport_name" maxlength="100" required>
+    <br><br>
+
+    <label>Location:</label>
+    <input type="text" name="location" maxlength="150" required>
+    <br><br>
+
+    <label>Details:</label>
+    <textarea name="details"></textarea>
+    <br><br>
+
+    <button type="submit">Add Airport</button>
+</form>
+
+<hr>
+
+<h3>Airport List</h3>
+
+<form action="{{ url_for('airports') }}" method="GET">
+    <input
+        type="text"
+        name="search"
+        placeholder="Search code, name, or location"
+        value="{{ search }}"
+    >
+
+    <button type="submit">Search</button>
+    <a href="{{ url_for('airports') }}">Clear</a>
+</form>
+
+<br>
+
+<table border="1" cellpadding="8">
+    <tr>
+        <th>Airport Code</th>
+        <th>Airport Name</th>
+        <th>Location</th>
+        <th>Details</th>
+        <th>Action</th>
+    </tr>
+
+    {% for airport in airports %}
+    <tr>
+        <td>{{ airport.airport_code }}</td>
+        <td>{{ airport.airport_name }}</td>
+        <td>{{ airport.location }}</td>
+        <td>{{ airport.details or "" }}</td>
+        <td>
+            <a href="/edit_airport/{{ airport.airport_code }}">Edit</a>
+
+            <form
+                action="/delete_airport/{{ airport.airport_code }}"
+                method="POST"
+                style="display:inline;"
+                onsubmit="return confirm('Delete this airport?');"
+            >
+                <button type="submit">Delete</button>
+            </form>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+
+{% endblock %}

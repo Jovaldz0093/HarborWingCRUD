@@ -1,0 +1,94 @@
+
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2>Flight Leg Management</h2>
+
+<h3>Add Flight Leg</h3>
+
+<form action="/add_flight_leg" method="POST">
+    <label>Flight Schedule:</label>
+    <select name="flight_number" required>
+        {% for flight in flights %}
+        <option value="{{ flight.flight_number }}">
+            {{ flight.flight_number }}
+            ({{ flight.origin }} to {{ flight.destination }})
+        </option>
+        {% endfor %}
+    </select>
+    <br><br>
+
+    <label>Origin Airport Code:</label>
+    <input type="text" name="origin" maxlength="10" required>
+    <br><br>
+
+    <label>Destination Airport Code:</label>
+    <input type="text" name="destination" maxlength="10" required>
+    <br><br>
+
+    <label>Actual Departure:</label>
+    <input type="datetime-local" name="actual_departure">
+    <br><br>
+
+    <label>Actual Arrival:</label>
+    <input type="datetime-local" name="actual_arrival">
+    <br><br>
+
+    <button type="submit">Add Flight Leg</button>
+</form>
+
+<hr>
+
+<h3>Flight Leg List</h3>
+
+<form action="{{ url_for('flight_legs') }}" method="GET">
+    <input
+        type="text"
+        name="search"
+        placeholder="Search leg ID, flight number, origin, or destination"
+        value="{{ search }}"
+    >
+
+    <button type="submit">Search</button>
+    <a href="{{ url_for('flight_legs') }}">Clear</a>
+</form>
+
+<br>
+
+<table border="1" cellpadding="8">
+    <tr>
+        <th>Leg ID</th>
+        <th>Flight Number</th>
+        <th>Origin</th>
+        <th>Destination</th>
+        <th>Actual Departure</th>
+        <th>Actual Arrival</th>
+        <th>Action</th>
+    </tr>
+
+    {% for leg in legs %}
+    <tr>
+        <td>{{ leg.leg_id }}</td>
+        <td>{{ leg.flight_number }}</td>
+        <td>{{ leg.origin }}</td>
+        <td>{{ leg.destination }}</td>
+        <td>{{ leg.actual_departure or "Not recorded" }}</td>
+        <td>{{ leg.actual_arrival or "Not recorded" }}</td>
+        <td>
+            <a href="/edit_flight_leg/{{ leg.leg_id }}">Edit</a>
+
+            <form
+                action="/delete_flight_leg/{{ leg.leg_id }}"
+                method="POST"
+                style="display:inline;"
+                onsubmit="return confirm('Delete this flight leg?');"
+            >
+                <button type="submit">Delete</button>
+            </form>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+
+{% endblock %}

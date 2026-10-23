@@ -1,0 +1,99 @@
+
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2>Flight Schedule Management</h2>
+
+<h3>Add Flight Schedule</h3>
+
+<form action="/add_flight_schedule" method="POST">
+    <label>Flight Number:</label>
+    <input type="text" name="flight_number" maxlength="20" required>
+    <br><br>
+
+    <label>Airline Code:</label>
+    <input type="text" name="airline_code" maxlength="10" required>
+    <br><br>
+
+    <label>Aircraft Code:</label>
+    <input type="text" name="aircraft_code" maxlength="10" required>
+    <br><br>
+
+    <label>Origin Airport Code:</label>
+    <input type="text" name="origin" maxlength="10" required>
+    <br><br>
+
+    <label>Destination Airport Code:</label>
+    <input type="text" name="destination" maxlength="10" required>
+    <br><br>
+
+    <label>Scheduled Departure:</label>
+    <input type="datetime-local" name="scheduled_departure" required>
+    <br><br>
+
+    <label>Scheduled Arrival:</label>
+    <input type="datetime-local" name="scheduled_arrival" required>
+    <br><br>
+
+    <button type="submit">Add Flight</button>
+</form>
+
+<hr>
+
+<h3>Flight Schedule List</h3>
+
+<form action="{{ url_for('flight_schedules') }}" method="GET">
+    <input
+        type="text"
+        name="search"
+        placeholder="Search flight, airline, aircraft, origin, or destination"
+        value="{{ search }}"
+    >
+
+    <button type="submit">Search</button>
+    <a href="{{ url_for('flight_schedules') }}">Clear</a>
+</form>
+
+<br>
+
+<table border="1" cellpadding="8">
+    <tr>
+        <th>Flight Number</th>
+        <th>Airline</th>
+        <th>Aircraft</th>
+        <th>Origin</th>
+        <th>Destination</th>
+        <th>Departure</th>
+        <th>Arrival</th>
+        <th>Action</th>
+    </tr>
+
+    {% for flight in flights %}
+    <tr>
+        <td>{{ flight.flight_number }}</td>
+        <td>{{ flight.airline_code }}</td>
+        <td>{{ flight.aircraft_code }}</td>
+        <td>{{ flight.origin }}</td>
+        <td>{{ flight.destination }}</td>
+        <td>{{ flight.scheduled_departure }}</td>
+        <td>{{ flight.scheduled_arrival }}</td>
+        <td>
+            <a href="/edit_flight_schedule/{{ flight.flight_number }}">
+                Edit
+            </a>
+
+            <form
+                action="/delete_flight_schedule/{{ flight.flight_number }}"
+                method="POST"
+                style="display:inline;"
+                onsubmit="return confirm('Delete this flight schedule?');"
+            >
+                <button type="submit">Delete</button>
+            </form>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+
+{% endblock %}

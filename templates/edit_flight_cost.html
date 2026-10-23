@@ -1,0 +1,48 @@
+
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2>Edit Flight Cost</h2>
+
+<p>Flight: {{ cost.flight_number }}</p>
+<p>Aircraft: {{ cost.aircraft_code }}</p>
+
+<form method="POST">
+    <label>Valid From:</label>
+    <input
+        type="date"
+        name="valid_from"
+        value="{{ cost.valid_from }}"
+        required
+    >
+    <br><br>
+
+    <label>Valid To:</label>
+    <input
+        type="date"
+        name="valid_to"
+        value="{{ cost.valid_to }}"
+        required
+    >
+    <br><br>
+
+    <label>Amount:</label>
+    <input
+        type="number"
+        name="amount"
+        min="0.01"
+        step="0.01"
+        value="{{ cost.amount }}"
+        required
+    >
+    <br><br>
+
+    <button type="submit">Save Changes</button>
+</form>
+
+<br>
+
+<a href="{{ url_for('flight_costs') }}">Back to Flight Costs</a>
+
+{% endblock %}

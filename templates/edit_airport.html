@@ -1,0 +1,40 @@
+
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2>Edit Airport {{ airport.airport_code }}</h2>
+
+<form method="POST">
+    <label>Airport Name:</label>
+    <input
+        type="text"
+        name="airport_name"
+        value="{{ airport.airport_name }}"
+        maxlength="100"
+        required
+    >
+    <br><br>
+
+    <label>Location:</label>
+    <input
+        type="text"
+        name="location"
+        value="{{ airport.location }}"
+        maxlength="150"
+        required
+    >
+    <br><br>
+
+    <label>Details:</label>
+    <textarea name="details">{{ airport.details or "" }}</textarea>
+    <br><br>
+
+    <button type="submit">Save Changes</button>
+</form>
+
+<br>
+
+<a href="{{ url_for('airports') }}">Back to Airports</a>
+
+{% endblock %}

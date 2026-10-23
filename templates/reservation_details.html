@@ -1,0 +1,112 @@
+
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2>Reservation Details</h2>
+
+<h3>Select a Reservation</h3>
+
+<form method="GET" action="{{ url_for('reservation_details') }}">
+    <select name="reservation_id" required>
+        <option value="">Choose a reservation</option>
+
+        {% for r in reservations %}
+        <option value="{{ r.reservation_id }}"
+            {% if selected_id|string == r.reservation_id|string %}selected{% endif %}>
+            Reservation {{ r.reservation_id }} —
+            {{ r.first_name }} {{ r.last_name }}
+        </option>
+        {% endfor %}
+    </select>
+
+    <button type="submit">View Details</button>
+</form>
+
+{% if selected_id and not details %}
+    <p>Reservation not found.</p>
+{% endif %}
+
+{% if details %}
+
+    <hr>
+
+    <h3>Reservation Information</h3>
+
+    <p><strong>Reservation ID:</strong> {{ details.reservation_id }}</p>
+    <p><strong>Status:</strong> {{ details.status_code }}</p>
+    <p><strong>Ticket Type:</strong> {{ details.ticket_code }}</p>
+    <p><strong>Travel Class:</strong> {{ details.class_code }}</p>
+    <p><strong>Booking Agent ID:</strong> {{ details.agent_id }}</p>
+    <p><strong>Created At:</strong> {{ details.created_at }}</p>
+    <p><strong>Party Size:</strong> {{ details.party_size }}</p>
+
+    <h3>Passenger Information</h3>
+
+    <p>
+        <strong>Name:</strong>
+        {{ details.first_name }} {{ details.last_name }}
+    </p>
+
+    <p><strong>Email:</strong> {{ details.email or "Not provided" }}</p>
+    <p><strong>Phone:</strong> {{ details.phone or "Not provided" }}</p>
+
+    <hr>
+
+    <h3>Related Payments</h3>
+
+    <table border="1" cellpadding="8">
+        <tr>
+            <th>Payment ID</th>
+            <th>Status</th>
+            <th>Payment Date</th>
+            <th>Amount</th>
+        </tr>
+
+        {% for pay in payments %}
+        <tr>
+            <td>{{ pay.payment_id }}</td>
+            <td>{{ pay.status_code }}</td>
+            <td>{{ pay.payment_date }}</td>
+            <td>{{ pay.amount }}</td>
+        </tr>
+        {% else %}
+        <tr>
+            <td colspan="4">No payments linked to this reservation.</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <br>
+
+    <h3>Related Flight Legs</h3>
+
+    <table border="1" cellpadding="8">
+        <tr>
+            <th>Leg ID</th>
+            <th>Flight Number</th>
+            <th>Origin</th>
+            <th>Destination</th>
+            <th>Actual Departure</th>
+            <th>Actual Arrival</th>
+        </tr>
+
+        {% for leg in legs %}
+        <tr>
+            <td>{{ leg.leg_id }}</td>
+            <td>{{ leg.flight_number }}</td>
+            <td>{{ leg.origin }}</td>
+            <td>{{ leg.destination }}</td>
+            <td>{{ leg.actual_departure or "Not recorded" }}</td>
+            <td>{{ leg.actual_arrival or "Not recorded" }}</td>
+        </tr>
+        {% else %}
+        <tr>
+            <td colspan="6">No flight legs linked to this reservation.</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+{% endif %}
+
+{% endblock %}

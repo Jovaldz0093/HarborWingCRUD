@@ -1,0 +1,70 @@
+
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2>Edit Reservation #{{ reservation.reservation_id }}</h2>
+
+<form method="POST">
+    <label>Passenger:</label>
+    <select name="passenger_id" required>
+        {% for passenger in passengers %}
+        <option value="{{ passenger.passenger_id }}"
+            {% if passenger.passenger_id == reservation.passenger_id %}selected{% endif %}>
+            {{ passenger.first_name }} {{ passenger.last_name }}
+        </option>
+        {% endfor %}
+    </select>
+    <br><br>
+
+    <label>Agent ID (optional):</label>
+    <input type="number" name="agent_id" min="1"
+           value="{{ reservation.agent_id or '' }}">
+    <br><br>
+
+    <label>Status:</label>
+    <select name="status_code" required>
+        {% for status in statuses %}
+        <option value="{{ status.status_code }}"
+            {% if status.status_code == reservation.status_code %}selected{% endif %}>
+            {{ status.status_code }} - {{ status.description }}
+        </option>
+        {% endfor %}
+    </select>
+    <br><br>
+
+    <label>Ticket Type:</label>
+    <select name="ticket_code" required>
+        {% for ticket in tickets %}
+        <option value="{{ ticket.ticket_code }}"
+            {% if ticket.ticket_code == reservation.ticket_code %}selected{% endif %}>
+            {{ ticket.ticket_code }} - {{ ticket.description }}
+        </option>
+        {% endfor %}
+    </select>
+    <br><br>
+
+    <label>Travel Class:</label>
+    <select name="class_code" required>
+        {% for travel_class in classes %}
+        <option value="{{ travel_class.class_code }}"
+            {% if travel_class.class_code == reservation.class_code %}selected{% endif %}>
+            {{ travel_class.class_code }} - {{ travel_class.description }}
+        </option>
+        {% endfor %}
+    </select>
+    <br><br>
+
+    <label>Party Size:</label>
+    <input type="number" name="party_size" min="1"
+           value="{{ reservation.party_size }}" required>
+    <br><br>
+
+    <button type="submit">Save Changes</button>
+</form>
+
+<br>
+
+<a href="{{ url_for('reservations') }}">Back to Reservations</a>
+
+{% endblock %}

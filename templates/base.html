@@ -1,0 +1,82 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HarborWing Air</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            background-color: #f2f4f7;
+        }
+
+        header {
+            background-color: #0A2540;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        nav {
+            background-color: #163b5c;
+            padding: 12px;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            padding: 8px 12px;
+            border-radius: 4px;
+        }
+
+        nav a:hover {
+            background-color: #FF9800;
+            color: black;
+        }
+
+        main {
+            background-color: white;
+            max-width: 1100px;
+            margin: 25px auto;
+            padding: 20px;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>HarborWing Air</h1>
+        <p>Airline Database Management System</p>
+    </header>
+
+    <nav>
+        <a href="{{ url_for('home') }}">Home</a>
+        <a href="{{ url_for('booking_agents') }}">Booking Agents</a>
+        <a href="{{ url_for('passengers') }}">Passengers</a>
+        <a href="{{ url_for('reservations') }}">Reservations</a>
+        <a href="{{ url_for('payments') }}">Payments</a>
+        <a href="{{ url_for('airports') }}">Airports</a>
+        <a href="{{ url_for('flight_schedules') }}">Flight Schedules</a>
+        <a href="{{ url_for('flight_legs') }}">Flight Legs</a>
+        <a href="{{ url_for('flight_costs') }}">Flight Costs</a>
+        
+        <a href="{{ url_for('reservation_details') }}">Reservation Details</a>
+        <a href="{{ url_for('reservation_legs') }}">Reservation Legs</a>
+        <a href="{{ url_for('reservation_payments') }}">Reservation Payments</a>
+
+    </nav>
+
+    <main>
+        {% block content %}
+        {% endblock %}
+    </main>
+</body>
+</html>

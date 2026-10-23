@@ -1,0 +1,91 @@
+
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2>Reservation-Flight Leg Links</h2>
+
+<h3>Link a Reservation to a Flight Leg</h3>
+
+<form method="POST" action="{{ url_for('reservation_legs') }}">
+    <label>Reservation:</label>
+    <select name="reservation_id" required>
+        <option value="">Select Reservation</option>
+        {% for r in reservations %}
+        <option value="{{ r.reservation_id }}">
+            Reservation {{ r.reservation_id }}
+        </option>
+        {% endfor %}
+    </select>
+
+    <br><br>
+
+    <label>Flight Leg:</label>
+    <select name="leg_id" required>
+        <option value="">Select Flight Leg</option>
+        {% for leg in legs %}
+        <option value="{{ leg.leg_id }}">
+            Leg {{ leg.leg_id }} - {{ leg.flight_number }}:
+            {{ leg.origin }} to {{ leg.destination }}
+        </option>
+        {% endfor %}
+    </select>
+
+    <br><br>
+
+    <button type="submit">Add Link</button>
+</form>
+
+<hr>
+
+<h3>Existing Links</h3>
+
+<table border="1" cellpadding="8">
+    <thead>
+        <tr>
+            <th>Reservation ID</th>
+            <th>Passenger</th>
+            <th>Leg ID</th>
+            <th>Flight Number</th>
+            <th>Origin</th>
+            <th>Destination</th>
+            <th>Actual Departure</th>
+            <th>Actual Arrival</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        {% for link in links %}
+        <tr>
+            <td>{{ link.reservation_id }}</td>
+            <td>{{ link.first_name }} {{ link.last_name }}</td>
+            <td>{{ link.leg_id }}</td>
+            <td>{{ link.flight_number }}</td>
+            <td>{{ link.origin }}</td>
+            <td>{{ link.destination }}</td>
+            <td>{{ link.actual_departure or "Not recorded" }}</td>
+            <td>{{ link.actual_arrival or "Not recorded" }}</td>
+            <td>
+                <form
+                    method="POST"
+                    action="{{ url_for(
+                        'unlink_leg',
+                        reservation_id=link.reservation_id,
+                        leg_id=link.leg_id
+                    ) }}"
+                    onsubmit="return confirm('Remove this link only? The reservation and flight leg will remain.');"
+                >
+                    <button type="submit">Unlink</button>
+                </form>
+            </td>
+        </tr>
+        {% else %}
+        <tr>
+            <td colspan="9">No reservation-flight leg links found.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}

@@ -1,0 +1,107 @@
+
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2>Flight Cost Management</h2>
+
+<h3>Add Flight Cost</h3>
+
+<form action="/add_flight_cost" method="POST">
+    <label>Flight Number:</label>
+    <select name="flight_number" required>
+        {% for flight in flights %}
+        <option value="{{ flight.flight_number }}">
+            {{ flight.flight_number }}
+        </option>
+        {% endfor %}
+    </select>
+    <br><br>
+
+    <label>Aircraft Type:</label>
+    <select name="aircraft_code" required>
+        {% for aircraft in aircraft_types %}
+        <option value="{{ aircraft.aircraft_code }}">
+            {{ aircraft.aircraft_code }}
+        </option>
+        {% endfor %}
+    </select>
+    <br><br>
+
+    <label>Valid From:</label>
+    <input type="date" name="valid_from" required>
+    <br><br>
+
+    <label>Valid To:</label>
+    <input type="date" name="valid_to" required>
+    <br><br>
+
+    <label>Amount:</label>
+    <input type="number" name="amount" min="0.01" step="0.01" required>
+    <br><br>
+
+    <button type="submit">Add Flight Cost</button>
+</form>
+
+<hr>
+
+<h3>Flight Cost List</h3>
+
+<form action="{{ url_for('flight_costs') }}" method="GET">
+    <label>Search Flight or Aircraft:</label>
+    <input
+        type="text"
+        name="search"
+        placeholder="Flight number or aircraft code"
+        value="{{ search }}"
+    >
+
+    <label>Valid on Date:</label>
+    <input
+        type="date"
+        name="valid_date"
+        value="{{ valid_date }}"
+    >
+
+    <button type="submit">Search / Filter</button>
+    <a href="{{ url_for('flight_costs') }}">Clear</a>
+</form>
+
+<br>
+
+<table border="1" cellpadding="8">
+    <tr>
+        <th>Flight Number</th>
+        <th>Aircraft Code</th>
+        <th>Valid From</th>
+        <th>Valid To</th>
+        <th>Amount</th>
+        <th>Action</th>
+    </tr>
+
+    {% for cost in costs %}
+    <tr>
+        <td>{{ cost.flight_number }}</td>
+        <td>{{ cost.aircraft_code }}</td>
+        <td>{{ cost.valid_from }}</td>
+        <td>{{ cost.valid_to }}</td>
+        <td>{{ cost.amount }}</td>
+        <td>
+            <a href="/edit_flight_cost/{{ cost.flight_number }}/{{ cost.aircraft_code }}/{{ cost.valid_from }}">
+                Edit
+            </a>
+
+            <form
+                action="/delete_flight_cost/{{ cost.flight_number }}/{{ cost.aircraft_code }}/{{ cost.valid_from }}"
+                method="POST"
+                style="display:inline;"
+                onsubmit="return confirm('Delete this flight cost?');"
+            >
+                <button type="submit">Delete</button>
+            </form>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+
+{% endblock %}

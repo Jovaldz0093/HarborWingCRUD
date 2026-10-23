@@ -1,0 +1,52 @@
+
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2>Edit Flight Leg #{{ leg.leg_id }}</h2>
+
+<form method="POST">
+    <label>Flight Schedule:</label>
+    <select name="flight_number" required>
+        {% for flight in flights %}
+        <option value="{{ flight.flight_number }}"
+            {% if flight.flight_number == leg.flight_number %}selected{% endif %}>
+            {{ flight.flight_number }}
+            ({{ flight.origin }} to {{ flight.destination }})
+        </option>
+        {% endfor %}
+    </select>
+    <br><br>
+
+    <label>Origin Airport Code:</label>
+    <input type="text" name="origin" value="{{ leg.origin }}" required>
+    <br><br>
+
+    <label>Destination Airport Code:</label>
+    <input type="text" name="destination" value="{{ leg.destination }}" required>
+    <br><br>
+
+    <label>Actual Departure:</label>
+    <input
+        type="datetime-local"
+        name="actual_departure"
+        value="{{ leg.actual_departure.strftime('%Y-%m-%dT%H:%M') if leg.actual_departure else '' }}"
+    >
+    <br><br>
+
+    <label>Actual Arrival:</label>
+    <input
+        type="datetime-local"
+        name="actual_arrival"
+        value="{{ leg.actual_arrival.strftime('%Y-%m-%dT%H:%M') if leg.actual_arrival else '' }}"
+    >
+    <br><br>
+
+    <button type="submit">Save Changes</button>
+</form>
+
+<br>
+
+<a href="{{ url_for('flight_legs') }}">Back to Flight Legs</a>
+
+{% endblock %}

@@ -1,0 +1,19 @@
+
+{% extends "base.html" %}
+
+{% block content %}
+    <h2>Welcome to HarborWing Air</h2>
+
+    <p>Select a section to manage:</p>
+
+    <ul>
+        <li><a href="{{ url_for('booking_agents') }}">Manage Booking Agents</a></li>
+        <li><a href="{{ url_for('passengers') }}">Manage Passengers</a></li>
+        <li><a href="{{ url_for('reservations') }}">Manage Reservations</a></li>
+        <li><a href="{{ url_for('payments') }}">Manage Payments</a></li>
+        <li><a href="{{ url_for('airports') }}">Manage Airports</a></li>
+        <li><a href="{{ url_for('flight_schedules') }}">Manage Flight Schedules</a></li>
+        <li><a href="{{ url_for('flight_legs') }}">Manage Flight Legs</a></li>
+        <li><a href="{{ url_for('flight_costs') }}">Manage Flight Costs</a></li>
+    </ul>
+{% endblock %}

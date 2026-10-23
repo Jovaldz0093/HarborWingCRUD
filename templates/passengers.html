@@ -1,0 +1,76 @@
+
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2>Passenger Management</h2>
+
+<h3>Add Passenger</h3>
+
+<form action="/add_passenger" method="POST">
+    <input type="text" name="first_name"
+           placeholder="First name" required>
+
+    <input type="text" name="last_name"
+           placeholder="Last name" required>
+
+    <input type="email" name="email"
+           placeholder="Email">
+
+    <input type="text" name="phone"
+           placeholder="Phone">
+
+    <button type="submit">Add Passenger</button>
+</form>
+
+<hr>
+
+<h3>Search Passengers</h3>
+
+<form action="{{ url_for('passengers') }}" method="GET">
+    <input
+        type="text"
+        name="search"
+        placeholder="Search passengers..."
+        value="{{ search }}"
+    >
+
+    <button type="submit">Search</button>
+
+    <a href="{{ url_for('passengers') }}">Clear</a>
+</form>
+
+<hr>
+
+<h3>Passenger List</h3>
+
+<table border="1" cellpadding="8">
+    <tr>
+        <th>ID</th>
+        <th>First Name</th>
+        <th>Last Name</th>
+        <th>Email</th>
+        <th>Phone</th>
+        <th>Action</th>
+    </tr>
+
+    {% for passenger in passengers %}
+    <tr>
+        <td>{{ passenger[0] }}</td>
+        <td>{{ passenger[1] }}</td>
+        <td>{{ passenger[2] }}</td>
+        <td>{{ passenger[3] }}</td>
+        <td>{{ passenger[4] }}</td>
+        <td>
+            <a href="/edit_passenger/{{ passenger[0] }}">Edit</a>
+
+            <form action="/delete_passenger/{{ passenger[0] }}"
+                  method="POST" style="display:inline;">
+                <button type="submit">Delete</button>
+            </form>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+
+{% endblock %}

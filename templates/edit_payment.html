@@ -1,0 +1,49 @@
+
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2>Edit Payment</h2>
+
+<p>Payment ID: {{ payment.payment_id }}</p>
+<p>Payment Date: {{ payment.payment_date }}</p>
+
+<form
+    action="{{ url_for('edit_payment', payment_id=payment.payment_id) }}"
+    method="POST"
+>
+    <label>Payment Status:</label>
+
+    <select name="status_code" required>
+        {% for status in statuses %}
+        <option
+            value="{{ status.status_code }}"
+            {% if payment.status_code|string == status.status_code|string %}selected{% endif %}
+        >
+            {{ status.status_code }} - {{ status.description }}
+        </option>
+        {% endfor %}
+    </select>
+
+    <br><br>
+
+    <label>Amount:</label>
+    <input
+        type="number"
+        name="amount"
+        min="0.01"
+        step="0.01"
+        value="{{ payment.amount }}"
+        required
+    >
+
+    <br><br>
+
+    <button type="submit">Save Changes</button>
+</form>
+
+<br>
+
+<a href="{{ url_for('payments') }}">Back to Payments</a>
+
+{% endblock %}
